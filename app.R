@@ -14,20 +14,20 @@ library(VennDiagram)
 ###################################################################################
 
 ui <- fluidPage(
-  navbarPage(title = "PPI-tools",
+  navbarPage(title = "PPI Tool",
              
              #==============================Main page================================#  
              tabPanel("Home",
                       
                       
-                      titlePanel(h1("Welcome to PPI-tools",align="center",style="color: skyblue")), 
+                      titlePanel(h1("Welcome to PPI Tool",align="center",style="color: skyblue")), 
                       
-                      titlePanel(h4("PPI-tools uses a probabilistic method based on fisher' exact test ",align="center")),   
+                      titlePanel(h4("PPI Tool uses a probabilistic method based on fisher' exact test ",align="center")),   
                       titlePanel(h4("screens out potential significants protein-protein interactors to your bait of interests",align="center")),    
                       titlePanel(h4("It demonstrates better performance and higher true positive",align="center")), 
                       titlePanel(h4("gives you more potential choices for proteomic interaction studies",align="center")), 
                       
-                      titlePanel(h3("For the usage of PPI-tools, check 'Documentation' tab",align="center",style="color: blue")),
+                      titlePanel(h3("For the usage of PPI Tool, check 'Documentation' tab",align="center",style="color: blue")),
                       titlePanel(h3("To start the prediction, click 'analysis' tab",align="center",style="color: blue")),
                       #titlePanel(img(src="d349c30a004e2a98460c5ad288f4f5c2.jpg", height = 100, width = 100)), 
              ), 
@@ -128,7 +128,7 @@ ui <- fluidPage(
                         
                         p(""),
                         br(),
-                        p("The PPI-tools is created by Qiyao Wu and Xueyang Zhang Ph.D"),
+                        p("The PPI Tool is created by Qiyao Wu and Xueyang Zhang Ph.D"),
                         br(),
                         
                         
