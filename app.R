@@ -18,7 +18,6 @@ if(!require(shinycssloaders)){
 
 
 
-
 #for basic logic use
 if(!require(dplyr)){
   install.packages("dplyr")
@@ -32,10 +31,6 @@ if(!require(VennDiagram)){
   install.packages("VennDiagram")
   library(VennDiagram)
 }
-
-# library(dplyr)
-# library(UpSetR)
-# library(VennDiagram)
 
 
 
@@ -69,6 +64,8 @@ ui <- fluidPage(
                       titlePanel(h4("screens out potential significants protein-protein interactors to your bait of interests",align="center")),    
                       titlePanel(h4("It demonstrates better performance and higher true positive",align="center")), 
                       titlePanel(h4("gives you more potential choices for proteomic interaction studies",align="center")), 
+                      titlePanel(h4("PPI Tool is simple to use and demonstrates satisfying results for both AP-MS and PL-MS data.",align="center",style="color: blue")),
+                      titlePanel(h4("Label-free or non-repeat data requires peptide spectrum match (PSM) information.",align="center",style="color: blue")),
                       titlePanel(h3("For the usage of PPI Tool, check 'Documentation' tab",align="center",style="color: blue")),
                       titlePanel(h3("To start the prediction, click 'analysis' tab",align="center",style="color: blue")),
                    
@@ -175,7 +172,7 @@ ui <- fluidPage(
                         
                         p(""),
                         br(),
-                        p("The PPI Tool is created by Qiyao Wu and Xueyang Zhang Ph.D"),
+                        p("PPI Tool is developed by Qiyao Wu under the guidence of Dr. Xueyang Zhang at Fujian Agriculture and Forestry University - Haixia Institute of Science and Technology - Basic Forestry and Proteomics Research Center"),
                         br(),
                         
                         
@@ -195,13 +192,10 @@ server <- function(input, output) {
     
     input$goButton
     
-    
-    
+  
+     
     if(input$goButton!= 0){
-      
-      
-      
-      
+     
       file <- input$file1
       ext <- tools::file_ext(file$datapath)
       
