@@ -4,6 +4,7 @@ library(shinyFiles)
 library(vroom)
 library(shinycssloaders)
 
+
 #for basic logic use
 library(dplyr)
 library(UpSetR)
@@ -15,7 +16,12 @@ library(VennDiagram)
 
 ui <- fluidPage(
   navbarPage(title = "PPI Tool",
-             
+             tags$style(
+               'div[data-value="Home"]{ 
+                 width: 100%; height: 950px; 
+                 background-image: url("backxu2_rotate_20231123110300.jpg");
+               }'
+             ),
              #==============================Main page================================#  
              tabPanel("Home",
                       
@@ -26,10 +32,11 @@ ui <- fluidPage(
                       titlePanel(h4("screens out potential significants protein-protein interactors to your bait of interests",align="center")),    
                       titlePanel(h4("It demonstrates better performance and higher true positive",align="center")), 
                       titlePanel(h4("gives you more potential choices for proteomic interaction studies",align="center")), 
-                      
                       titlePanel(h3("For the usage of PPI Tool, check 'Documentation' tab",align="center",style="color: blue")),
                       titlePanel(h3("To start the prediction, click 'analysis' tab",align="center",style="color: blue")),
-                      #titlePanel(img(src="d349c30a004e2a98460c5ad288f4f5c2.jpg", height = 100, width = 100)), 
+                      
+                      
+                       
              ), 
              
              
@@ -96,11 +103,11 @@ ui <- fluidPage(
                         br(),
                         p("Column 1-5: Information about the proteins. At column 2, put single protein ID, the rest column can be any information."),
                         br(),
-                        p("Starting from column 6, list the spectral count of bait protein."),
+                        p("Starting from column 6, list the spectral count of bait & background protein."),
                         br(),
                         p("Following the columns, list the data of other baits or backgrounds (same replicates number). "),
                         br(),
-                        img(src="example_20231107155446.png", height = 650, width = 1400),
+                        img(src="example_page1.jpg", height = 650, width = 1400),
                         
                         br(),
                         br(),
@@ -114,6 +121,8 @@ ui <- fluidPage(
                         p("   and shows p-value of each proteins  (see examples below)" ),
                         br(),
                         img(src="example2.png", height = 650, width = 1400),
+                        
+                        
                         
                       )
              ),
