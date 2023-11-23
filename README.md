@@ -1,6 +1,7 @@
 # PPI Tool
 
-In Rstudio, run the following command to launch PPI Tool:
+Run the following command to launch PPI Tool:
 
+```bash
 runGitHub( "PPITool", "QiyaoWu90")
-
+```
