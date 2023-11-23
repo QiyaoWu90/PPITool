@@ -108,7 +108,7 @@ ui <- fluidPage(
                         
                         h2("Preparation of data sheet"),
                         br(),
-                        h4("Name your .csv file as your bait protein name, e.g. 'AIFM1.csv'. "),
+                        h4("Name your .csv file as your bait protein name, e.g. 'APC1.csv'. "),
                         
                         
                         br(),
@@ -129,7 +129,7 @@ ui <- fluidPage(
                         p("1. P-value for Fisher cut-off"),
                         br(),
                         p("2. The bait vs. # of background group for '1 on 1' Fisher.test " ),
-                        p("   and shows p-value of each proteins  (The following instance uses .csv file in input_example folder )" ),
+                        p("   and shows p-value of each proteins  (The following instance uses APC1.csv in input_example folder )" ),
                         br(),
                         img(src="doc_pic2.png"),
                         
