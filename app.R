@@ -210,31 +210,31 @@ server <- function(input, output) {
       
       col_number <- ncol(data1)
       
-      #提取数据列，前五列为char信息，从6开始为numeric data
+      #take column of data, starting from column 6, 1-5 columns are char. info
       data_num <- data.frame(data1[,c(6:col_number)])
       
-      #提取bait，数据前c(1:input$repeatsn)为bait  (input$repeats = 重复数) 
+      #take bait data
       bait <- data_num[,c(1:input$repeats)]
       
-      #提取背景  (5是数据前char 信息列的列数)
+      #take background data
       back <- data_num[,c((input$repeats +1 ):(col_number-5))]
       
-      #多少组背景（每个背景有input$repeats个重复）
+      #count the number of background groups
       n <- ncol(back)/input$repeats
       
-      #空list用于收集不同背景的比对结果
+      #create an empty list for collecting significance of different groups of comparison
       result_cutoff_protein_list <- list()
       
       
       #===================================================================================================#
-      #num1 为非0时，计算单个bait vs background并显示结果
+      #when num1 is not 0, conduct 1 bait vs 1 background job
       
       if(input$num1 != 0) {
         
         i <- input$num1  
         
         
-        #根据repeats 读取每组对比中的background数据集
+        #According to 'input$repeats', take the specific background group '#i' 
         if (input$repeats == 1 ) {
           back_inloop <- back[,c( (i-1)*1 +1 
                                   
@@ -283,17 +283,17 @@ server <- function(input, output) {
         
         #--------------bait background sheet for Fisher_Test--------------#
         
-        #提取char信息
+        #take char. info
         in_df <- df[,c(1:5)]
         
-        #背景总和(所有重复，暂定)
+        #Total count of background groups
         background_total <- sum(back_inloop)
         
-        #bait总和(所有重复，暂定)
+        #Total count of bait groups
         bait_total <- sum(bait)
         
         
-        #backg. 和bait总数比大小，决定情况
+        #comparing total of backg. and bait, deciding the next process
         if (background_total < bait_total)
           
         {
@@ -307,27 +307,27 @@ server <- function(input, output) {
           
         } 
         
-        #如果bait比background小，要impute所有0为1
+        #If bait < backg, start imputing
         if (background_total > bait_total)
           
         {
           
           df2 <- cbind(in_df,bait)
-          df2_original <- df2      #用来比对impute前后
+          df2_original <- df2      #For comparing before and after imputation
           
           row_num <- nrow(df2)
           
           rows_of_zeros <- 0
           
-          #计数全是0的row
+          #count all rows of '0s'
           for (x in 1:row_num) 
             
           {
-            matrix1 <- as.matrix(df2[x,c(6:8)])
+            matrix1 <- as.matrix(df2[x,c(6:(6+input$repeats-1))])
             
             
             
-            if (matrix1[1,1] ==0 &  matrix1[1,2] ==0 & matrix1[1,3] ==0 ) {
+            if ( sum(matrix1) ==0 ) {
               rows_of_zeros = rows_of_zeros +1
             }
             
@@ -357,9 +357,9 @@ server <- function(input, output) {
           #根据上述结果对df2进行impute
           for (x in 1:row_num) 
           {
-            matrix1 <- as.matrix(df2[x,c(6:8)])
+            matrix1 <- as.matrix(df2[x,c(6:(6+input$repeats-1))])
             
-            if (matrix1[1,1] ==0 &  matrix1[1,2] ==0 & matrix1[1,3] ==0 )
+            if ( sum(matrix1) ==0 )
               
             { 
               matrix1[1,1] <- impute_num      #impute number
@@ -372,12 +372,12 @@ server <- function(input, output) {
           in_df <- df2[,c(1:5)] 
           
           back_inloop2 <- back_inloop
-          bait_inloop2 <- df2[,c(6:8)]
+          bait_inloop2 <- df2[,c(6:(6+input$repeats-1))]
           
           
           
           background_total_loop2 <- background_total
-          bait_total_loop2       <- sum(df2[,c(6:8)]) 
+          bait_total_loop2       <- sum(df2[,c(6:(6+input$repeats-1))]) 
           
         }
         
@@ -566,11 +566,11 @@ server <- function(input, output) {
               for (x in 1:row_num) 
                 
               {
-                matrix1 <- as.matrix(df2[x,c(6:8)])
+                matrix1 <- as.matrix(df2[x,c(6:(6+input$repeats-1))])
                 
                 
                 
-                if (matrix1[1,1] ==0 &  matrix1[1,2] ==0 & matrix1[1,3] ==0 ) {
+                if (sum (matrix1) ==0 ) {
                   rows_of_zeros = rows_of_zeros +1
                 }
                 
@@ -600,13 +600,13 @@ server <- function(input, output) {
               #根据上述结果对df2进行impute
               for (x in 1:row_num) 
               {
-                matrix1 <- as.matrix(df2[x,c(6:8)])
+                matrix1 <- as.matrix(df2[x,c(6:(6+input$repeats-1))])
                 
-                if (matrix1[1,1] ==0 &  matrix1[1,2] ==0 & matrix1[1,3] ==0 )
+                if (sum(matrix1)==0 )
                   
                 { 
                   matrix1[1,1] <- impute_num      #impute number
-                  df2[x,c(6:8)]    <-    matrix1  
+                  df2[x,c(6:(6+input$repeats-1))]    <-    matrix1  
                   df2[x,2] <- paste(df2[x,2],sep = "")   #在majority protein上加星号，值是impute_star,(先不加)，注意majority的位置是[x,2]
                 }
               }
@@ -615,12 +615,12 @@ server <- function(input, output) {
               in_df <- df2[,c(1:5)] 
               
               back_inloop2 <- back_inloop
-              bait_inloop2 <- df2[,c(6:8)]
+              bait_inloop2 <- df2[,c(6:(6+input$repeats-1))]
               
               
               
               background_total_loop2 <- background_total
-              bait_total_loop2       <- sum(df2[,c(6:8)]) 
+              bait_total_loop2       <- sum(df2[,c(6:(6+input$repeats-1))]) 
               
             }
             
