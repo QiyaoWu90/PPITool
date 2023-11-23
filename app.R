@@ -1,14 +1,41 @@
 #for distribution use
-library(shiny)
-library(shinyFiles)
-library(vroom)
-library(shinycssloaders)
+if(!require(shiny)){
+  install.packages("shiny")
+  library(shiny)
+}
+if(!require(shinyFiles)){
+  install.packages("shinyFiles")
+  library(shinyFiles)
+}
+if(!require(vroom)){
+  install.packages("vroom")
+  library(vroom)
+}
+if(!require(shinycssloaders)){
+  install.packages("shinycssloaders")
+  library(shinycssloaders)
+}
+
+
 
 
 #for basic logic use
-library(dplyr)
-library(UpSetR)
-library(VennDiagram)
+if(!require(dplyr)){
+  install.packages("dplyr")
+  library(dplyr)
+}
+if(!require(UpSetR)){
+  install.packages("UpSetR")
+  library(UpSetR)
+}
+if(!require(VennDiagram)){
+  install.packages("VennDiagram")
+  library(VennDiagram)
+}
+
+# library(dplyr)
+# library(UpSetR)
+# library(VennDiagram)
 
 
 
