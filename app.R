@@ -16,8 +16,6 @@ if(!require(shinycssloaders)){
   library(shinycssloaders)
 }
 
-
-
 #for basic logic use
 if(!require(dplyr)){
   install.packages("dplyr")
@@ -31,7 +29,6 @@ if(!require(VennDiagram)){
   install.packages("VennDiagram")
   library(VennDiagram)
 }
-
 
 
 ###################################################################################
