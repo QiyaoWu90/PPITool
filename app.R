@@ -10,19 +10,29 @@ library(dplyr)
 library(UpSetR)
 library(VennDiagram)
 
+
+
 ###################################################################################
 #================================     UI      ====================================#
 ###################################################################################
 
 ui <- fluidPage(
-  navbarPage(title = "PPI Tool",
+  
+ 
+  #navbar icon pic
+  navbarPage(title=div(img(src="MyIcon.png",height = 25, width = 30), "PPI Tool"),
+          
+            
+             
+             #background pic
              tags$style(
                'div[data-value="Home"]{ 
                  width: 100%; height: 950px; 
-                 background-image: url("backxu2_rotate_20231123110300.jpg");
+                 background-image: url("background_img_mainpage.jpg");
                }'
              ),
-             #==============================Main page================================#  
+             
+             #============================== Main page ================================#  
              tabPanel("Home",
                       
                       
@@ -34,27 +44,24 @@ ui <- fluidPage(
                       titlePanel(h4("gives you more potential choices for proteomic interaction studies",align="center")), 
                       titlePanel(h3("For the usage of PPI Tool, check 'Documentation' tab",align="center",style="color: blue")),
                       titlePanel(h3("To start the prediction, click 'analysis' tab",align="center",style="color: blue")),
-                      
-                      
+                   
                        
              ), 
              
              
-             #==============================Analysis page================================#    
+             #============================== Analysis page ================================#    
              tabPanel("Analysis",
                       
-                      
                       fluidRow(
-                        
                         
                         sidebarLayout(
                           sidebarPanel(
                             
                             
-                            #输入主要data
+                            #input data
                             fileInput("file1", "Choose CSV file", accept = ".csv"),
                             
-                            #重复数
+                            # Number of repeats
                             sliderInput("repeats", "Number of replicates", value = 3, min = 1, max = 5),
                             
                             #Fisher p-value
@@ -68,36 +75,40 @@ ui <- fluidPage(
                             
                           ),
                           
-                          mainPanel(
+                          
                             
-                            tabsetPanel(
+                            mainPanel(
                               
-                              #loading effect withspinner()
-                              tabPanel("List of prey",withSpinner(tableOutput("contents")),downloadButton('tableDown',label = 'Download Table')),
-                              
-                              tabPanel("Upset plot",withSpinner(plotOutput("contents2",width = "100%",height = "800px"))),
-                              
-                              tabPanel("Interactions chart",withSpinner(tableOutput("contents3")),downloadButton('tableDown_intersect',label = 'Download Table')),
-                              
-                            )
-                          ), 
+                              tabsetPanel(
+                                
+                                #loading effect withspinner()
+                                tabPanel("List of prey",withSpinner(tableOutput("contents")),downloadButton('tableDown',label = 'Download Table')),
+                                
+                                tabPanel("Upset plot",withSpinner(plotOutput("contents2",width = "100%",height = "800px")),downloadButton('upsetplotDown',label = 'Download Plot')),
+                                
+                                tabPanel("Interactions chart",withSpinner(tableOutput("contents3")),downloadButton('tableDown_intersect',label = 'Download Table')),
+                                
+                              )
+                            ) 
+                            
+                          
                           
                         )
                         
                       )
              ),
              
-             #==============================Documentation================================#
+             #============================== Documentation ================================#
              
              tabPanel("Documentation",
                       mainPanel(
-                        img(src="d349c30a004e2a98460c5ad288f4f5c2.jpg", height = 100, width = 100),
+                        # img(src="FAFUicon.jpg", height = 100, width = 100),
                         br(),
                         
                         
                         h2("Preparation of data sheet"),
                         br(),
-                        h4("Important: Please name your .csv file as your bait protein name, e.g. 'AIFM1.csv'. "),
+                        h4("Name your .csv file as your bait protein name, e.g. 'AIFM1.csv'. "),
                         
                         
                         br(),
@@ -107,31 +118,31 @@ ui <- fluidPage(
                         br(),
                         p("Following the columns, list the data of other baits or backgrounds (same replicates number). "),
                         br(),
-                        img(src="example_page1.jpg", height = 650, width = 1400),
+                        img(src="doc_pic1.jpg", height = 650, width = 1400),
                         
                         br(),
                         br(),
                         
-                        h2("Input Parameters"),
+                        h2("Input Parameters "),
                         br(),
                         
                         p("1. P-value for Fisher cut-off"),
                         br(),
                         p("2. The bait vs. # of background group for '1 on 1' Fisher.test " ),
-                        p("   and shows p-value of each proteins  (see examples below)" ),
+                        p("   and shows p-value of each proteins  (The following instance uses .csv file in input_example folder )" ),
                         br(),
-                        img(src="example2.png", height = 650, width = 1400),
+                        img(src="doc_pic2.png"),
                         
                         
                         
                       )
              ),
              
-             #==============================About===============================#
+             #============================== About ===============================#
              
              tabPanel("About",
                       mainPanel(
-                        img(src="d349c30a004e2a98460c5ad288f4f5c2.jpg", height = 100, width = 100),
+                        img(src="FAFUicon.jpg", height = 100, width = 100),
                         br(),
                         br(),
                         
@@ -170,7 +181,7 @@ server <- function(input, output) {
       req(file)
       validate(need(ext == "csv", "Please upload a csv file"))
       
-      #------------------读取数据后开始处理数据---------------#
+      #------------------Data processing start------------------#
       
       data1 <- read.csv(file$datapath, header = T)
       
@@ -768,17 +779,15 @@ server <- function(input, output) {
   
   
   
-  #-----------------------------------upset plot------------------------------------#
-  output$contents2 <-  renderPlot({
+  #----------------------------------- upset plot reactive ------------------------------------#
+  Get_upsetplot <-  reactive({
     
-    if(input$goButton!= 0 && input$num1 == 0){
+    
       
       list1 = getData1()
       
       bait_target_name2 <- getBait_target_name()
-      
-      
-      
+     
       p1 <- upset(fromList(list1),  #转换兼容数据形式
                   
                   nsets = 30,     # 绘制的最大集合个数 - 对应表格col，图下-柱形图+点图
@@ -791,22 +800,40 @@ server <- function(input, output) {
                   
                   mb.ratio = c(0.45,0.55),   # 左侧和上方条形图的比例关系
                   
-                  text.scale = 1.2, # 文字标签的大小
+                  text.scale = 1.9, # 文字标签的大小
                   
                   mainbar.y.label = paste("intersections ", "(", bait_target_name2, ")", sep = "")
       )
       
       p1
-      
-    } else {print("Please set '0' for parameter #2")
-      
+    
+     
+  })
+  
+  #----------------------------------- show upset plot ------------------------------------#
+  
+  
+  output$contents2 <- renderPlot({
+    
+    if(input$goButton!= 0 && input$num1 == 0){
+    
+    pic <- Get_upsetplot()
+    
+    pic 
+    
+    } else {print("Please set '0' for parameter #2") 
       
       x<-matrix(1,1)
       p2 <- plot(x,ann = F, bty = "n", xaxt = "n", yaxt ="n",col ="white")
-      title("Please set '0' for parameter #2 for Upset plotting")
+      title("Please set '0' for parameter #2 for Upset plotting after clicking ‘Run’ ")
       
-    }
+    }  
+      
+      
+    
   })
+  
+  
   
   
   
@@ -846,7 +873,7 @@ server <- function(input, output) {
   }, width = "400px")
   
   
-  #------------------------- 保存功能 ------------------------#
+  #------------------------- download function ------------------------#
   
   output$tableDown <- downloadHandler(
     
@@ -857,7 +884,20 @@ server <- function(input, output) {
       vroom_write(which.table(), file, delim = "\t")
       
     }
+  )
+  
+  
+  output$upsetplotDown <- downloadHandler( 
     
+    filename = paste("upset_plot",Sys.Date(),".pdf",sep = ""),
+    
+    content = function(file) {
+      pdf(file ,height = 16, width = 22)
+      print(Get_upsetplot())
+      dev.off()                                      
+      
+      
+    }
   )
   
   
@@ -870,7 +910,6 @@ server <- function(input, output) {
       vroom_write(inter_chart(), file, delim = "\t")
       
     }
-    
   )
   
   
