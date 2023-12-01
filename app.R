@@ -39,7 +39,8 @@ ui <- fluidPage(
   
  
   #navbar icon pic
-  navbarPage(title=div(img(src="MyIcon.png",height = 25, width = 30), "PPI Tool"),
+  navbarPage(title = "PPI Tool",
+    #title=div(img(src="MyIcon.png",height = 25, width = 30), "PPI Tool"),
           
             
              
@@ -604,7 +605,7 @@ server <- function(input, output) {
                 { 
                   matrix1[1,1] <- impute_num      #impute number
                   df2[x,c(6:(6+input$repeats-1))]    <-    matrix1  
-                  df2[x,2] <- paste(df2[x,2],sep = "")   #在majority protein上加星号，值是impute_star,(先不加)，注意majority的位置是[x,2]
+                  df2[x,2] <- paste(df2[x,2],impute_star,sep = "")   #在majority protein上加星号，值是impute_star,(先不加)，注意majority的位置是[x,2]
                 }
               }
               
@@ -707,8 +708,18 @@ server <- function(input, output) {
             
             result_cutoff <- result[which(result$Fisher_P<input$pvalue),]
             
+            
+            
             #收集cutoff后的protein ID 到总表内
-            result_cutoff_protein_list[i] <- list(result_cutoff[,2])
+            
+            
+            medi1 <- data.frame(result_cutoff[,2])
+            
+            colnames(medi1) <- "V1"
+            
+            medi1 <- medi1 %>% filter(!grepl('\\*', V1))
+            
+            result_cutoff_protein_list[i] <- list(medi1[,1])
             
             names(result_cutoff_protein_list)[i] <- paste(gsub('.{2}$','',colnames(bait_inloop2)[1]), "_to_", gsub('.{2}$','',colnames(back_inloop2)[1]) ,sep = "")
             
