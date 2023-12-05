@@ -48,7 +48,7 @@ ui <- fluidPage(
              tags$style(
                'div[data-value="Home"]{ 
                  width: 100%; height: 950px; 
-                 background-image: url("background_img_mainpage.jpg");
+                 background-image: url("background_img_mainpage.png");
                }'
              ),
              
@@ -56,16 +56,18 @@ ui <- fluidPage(
              tabPanel("Home",
                       
                       
-                      titlePanel(h1("Welcome to PPI Tool",align="center",style="color: skyblue")), 
+                      titlePanel(h1("PPI tool",align="center",style="color: skyblue")), 
                       
-                      titlePanel(h4("PPI Tool uses a probabilistic method based on fisher' exact test ",align="center")),   
-                      titlePanel(h4("screens out potential significants protein-protein interactors to your bait of interests",align="center")),    
-                      titlePanel(h4("It demonstrates better performance and higher true positive",align="center")), 
-                      titlePanel(h4("gives you more potential choices for proteomic interaction studies",align="center")), 
-                      titlePanel(h4("PPI Tool is simple to use and demonstrates satisfying results for both AP-MS and PL-MS data.",align="center",style="color: blue")),
-                      titlePanel(h4("Label-free or non-repeat data requires peptide spectrum match (PSM) information.",align="center",style="color: blue")),
-                      titlePanel(h3("For the usage of PPI Tool, check 'Documentation' tab",align="center",style="color: blue")),
-                      titlePanel(h3("To start the prediction, click 'analysis' tab",align="center",style="color: blue")),
+                      titlePanel(h4("This tool is for protein-protein interactor screening from mass spectrometry data. ",align="center",style="color: orange")),
+                      br(),
+                      titlePanel(h4("It can be applied to both affinity-purification mass spectrometry data and",align="center")),    
+                      titlePanel(h4("proximity-labeling mass spectrometry data. PSM information is required but only ",align="center")), 
+                      titlePanel(h4("label-free DDA data has been tested.",align="center")), 
+                      br(),
+                      titlePanel(h4("PPI tool started by modifying Fisher’s exact test. We suppose the distribution ",align="center")),
+                      titlePanel(h4("of true and false interactors from PPI studies follows the same ",align="center")),
+                      titlePanel(h4("hypergeometric distribution. Generally, data with biological replicates are ",align="center")),
+                      titlePanel(h4("recommended but data without replicates are also suitable.",align="center")),
                    
                        
              ), 
@@ -823,7 +825,7 @@ server <- function(input, output) {
                   
                   nintersects = 40, #绘制的最大交集个数，NA则全部绘制 - 对应表格rol，图上-柱形图
                   
-                  order.by = "degree", # 矩阵中的交点是如何排列的。 "freq"根据交集个数排序，"degree" 根据基因交集密集度
+                  order.by = "freq", # 矩阵中的交点是如何排列的。 "freq"根据交集个数排序，"degree" 根据基因交集密集度
                   
                   keep.order = TRUE,
                   
@@ -831,7 +833,7 @@ server <- function(input, output) {
                   
                   text.scale = 1.9, # 文字标签的大小
                   
-                  mainbar.y.label = paste("intersections ", "(", bait_target_name2, ")", sep = "")
+                  #mainbar.y.label = paste("intersections ", "(", bait_target_name2, ")", sep = "")   #error/warning occur after R 4.1
       )
       
       p1
