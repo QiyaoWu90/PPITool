@@ -56,7 +56,7 @@ ui <- fluidPage(
              tabPanel("Home",
                       
                       
-                      titlePanel(h1("PPI tool",align="center",style="color: skyblue")), 
+                      titlePanel(h1("PPI Tool",align="center",style="color: skyblue")), 
                       
                       titlePanel(h4("This tool is for protein-protein interactor screening from mass spectrometry data. ",align="center",style="color: orange")),
                       br(),
