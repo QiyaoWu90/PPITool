@@ -1,15 +1,27 @@
 # About
 
-PPI Tool uses a probabilistic method based on fisher' exact test to screen out potential significants protein-protein interactors to your bait of interests.
+PPI Tool is for protein-protein interactor screening from mass spectrometry data.
 
-PPI Tool is simple to use and demonstrates satisfying results for both AP-MS and PL-MS data. Label-free or non-repeat data requires peptide spectrum match (PSM) information.
+It can be applied to both affinity-purification mass spectrometry data and proximity-labeling mass spectrometry data. PSM information is required but only label-free DDA data has been tested.
+
+PPI tool started by modifying Fisher's exact test. We suppose the distribution of true and false interactors from PPI studies follows the same hypergeometric distribution. Generally, data with biological replicates are recommended but data without replicates are also suitable.
 
 # Usage
 
-Run the following command to launch PPI Tool:
+Rstudio is recommended to launch the software
 
-```bash
+Run the following command to launch software:
+
+``` bash
 runGitHub( "PPITool", "QiyaoWu90")
 ```
 
-*Two examples can be found in input_example folder (three/four repeats dataset)
+User can also download the source code along with "www" folders, and initiate the app.R directly via Rstudio.
+
+# Input examples
+
+Two examples can be found in input_example folder (three/four repeats dataset)
+
+# How to use
+
+Please check the "Documentation" Tab of the software for the usage.
