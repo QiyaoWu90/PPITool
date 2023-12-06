@@ -166,14 +166,23 @@ ui <- fluidPage(
              
              tabPanel("About",
                       mainPanel(
-                        img(src="FAFUicon.jpg", height = 100, width = 100),
-                        br(),
-                        br(),
+                        
+                        
                         
                         p(""),
                         br(),
-                        p("PPI Tool is developed by Qiyao Wu under the guidence of Dr. Xueyang Zhang at Fujian Agriculture and Forestry University - Haixia Institute of Science and Technology - Basic Forestry and Proteomics Research Center"),
+                        p("The PPI tool was developed by Qiyao Wu under the guidance of Dr. Xueyang Zhang at the proteomics center of Haixia Institute of Science and Technology at Fujian Agriculture and Forestry University."),
                         br(),
+                        p("Thanks for the funding support provided by dear Prof. Dr. Chentao Lin. "),
+                        br(),
+                        p("Please contact Qiyao Wu (260702397@qq.com) for technical issues. "),
+                        br(),
+                        p("Or Dr. Xueyang Zhang (xueyangzhang2018@163.com) for other stuff. "),
+                        br(),
+                        br(),
+                        img(src="FAFUicon.jpg", height = 100, width = 100),
+                        
+                        
                         
                         
                       )
