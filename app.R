@@ -471,6 +471,8 @@ server <- function(input, output) {
         
         colnames(Fisher_P) <- "Fisher_P"
         
+        in_df <- in_df[,-c(6:9)]
+        
         result_cutoff_protein_list <- data.frame(cbind(in_df,Fisher_P))
         
         
