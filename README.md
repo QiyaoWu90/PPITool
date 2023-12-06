@@ -10,13 +10,22 @@ PPI tool started by modifying Fisher's exact test. We suppose the distribution o
 
 Rstudio is recommended to launch the software
 
-Run the following command to launch software:
+1. request the shiny package first:
+
+``` bash
+if(!require(shiny)){
+  install.packages("shiny")
+  library(shiny)
+}
+```
+
+2. Run the following command to launch software:
 
 ``` bash
 runGitHub( "PPITool", "QiyaoWu90")
 ```
 
-User can also download the source code along with "www" folders, and initiate the app.R directly via Rstudio.
+
 
 # Input examples
 
