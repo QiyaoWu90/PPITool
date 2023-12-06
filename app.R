@@ -342,10 +342,10 @@ server <- function(input, output) {
             
           }
           
-          #计算bait 和background 的差,与全是0的row相差几倍
+          #fold of bait and backg. 
           fold1 <- (background_total - bait_total)/rows_of_zeros
           
-          #定义impute数,给全是0的row impute一个数,来使bait总和超过background （最多不超过4）
+          #define imputing number (at maximum of 4)
           if (fold1 < 1)
           {impute_num <- 1
           impute_star <- "*"} else 
@@ -363,7 +363,7 @@ server <- function(input, output) {
                   impute_star <- "*****"
                   }
           
-          #根据上述结果对df2进行impute
+          
           for (x in 1:row_num) 
           {
             matrix1 <- as.matrix(df2[x,c(6:(6+input$repeats-1))])
@@ -371,13 +371,13 @@ server <- function(input, output) {
             if ( sum(matrix1) ==0 )
               
             { 
-              matrix1[1,1] <- impute_num      #impute number
+              matrix1[1,1] <- impute_num      
               df2[x,c(6:8)]    <-    matrix1  
-              df2[x,2] <- paste(df2[x,2],sep = "")   #在majority protein上加星号，值是impute_star,(先不加)，注意majority的位置是[x,2]
+              df2[x,2] <- paste(df2[x,2],sep = "")   
             }
           }
           
-          #重新提取char信息（更新带有impute星号的majority protein name）  
+          ）  
           in_df <- df2[,c(1:5)] 
           
           back_inloop2 <- back_inloop
@@ -393,37 +393,37 @@ server <- function(input, output) {
         
         
         
-        #生成新col信息
         
-        #1 添加各个row background 数据（暂定重复总和）
+        
+        #row background sum
         in_df$background <- apply(back_inloop2,1,sum)
         
         
-        #2添加background othesr列
+        #background othesr
         in_df$background_others <- background_total_loop2 - in_df$background
         
-        #bait row总和  
+        #bait row sum  
         in_df$baited <-  apply(bait_inloop2,1,sum)
         
-        #3计算bait 
+        #bait 
         in_df$bait <- in_df$baited -  in_df$background
         
-        #去掉baited列
+        
         in_df <- subset(in_df,select = -c(baited))
         
-        #负值变为0
+        #negative to zero
         in_df$bait[in_df$bait < 0 ] = 0
         
         
-        #4计算bait_others 
+        #bait_others 
         in_df$bait_others <- bait_total_loop2 - background_total_loop2 - in_df$bait
         
-        #负值变为0
+        #negative to zero
         in_df$bait_others[in_df$bait_others < 0 ] = 0
         
         
         
-        #重命名col
+        #rename col
         colnames(in_df)[6:9] <- c(
           paste(gsub('.{2}$','',colnames(back_inloop2)[1]),"background",sep = "_"),
           paste(gsub('.{2}$','',colnames(back_inloop2)[1]),"background_others",sep = "_"),
@@ -432,24 +432,24 @@ server <- function(input, output) {
         )
         
         
-        #================================#
-        #---------开始fisher循环---------#
-        #================================#
+        #===================================#
+        #---------start Fisher loop---------#
+        #===================================#
         
         
         data3 <- in_df[,6:9]
         
-        #读取行数
+        
         k_row <- nrow(data3)
         
-        #空数据集收集P值
+        
         Fisher_P <-data.frame()
         
         
         for (k in 1:k_row) {
           
           #~~~#
-          tryCatch({   #用tryCatch功能夹住方程，如果因无法算P产生错误则跳过，生成NA
+          tryCatch({  
             #~~~#
             
             #构建fisher矩阵
@@ -461,11 +461,11 @@ server <- function(input, output) {
             #Fisher Test
             dataoutput <- fisher.test(datainput, alternative = "less")
             
-            #收集P值
+            #collect P
             Fisher_P[k,1] <- dataoutput$p.value
             
-            #~~~#  #console内提示错误
-          }, error=function(e){print(paste("=======","Error occurred in",result_out[i],data2[k,1],"=======",sep = " "))})  #用tryCatch功能夹住方程，如果因无法算P产生错误则跳过，生成NA-尾部
+            #~~~#  #
+          }, error=function(e){print(paste("=======","Error occurred in",result_out[i],data2[k,1],"=======",sep = " "))})  
           #~~~# 
         }
         
@@ -482,11 +482,11 @@ server <- function(input, output) {
         if (input$num1 == 0) {
           
           #===================================================================================================================#
-          #当num1 = 0 则开始构建不同bait-background的df
+          #When num1 = 0 
           for (i in 1:n) {
             
             
-            #根据repeats 读取每组对比中的background数据集
+            
             if (input$repeats == 1 ) {
               back_inloop <- back[,c( (i-1)*1 +1 
                                       
@@ -535,17 +535,17 @@ server <- function(input, output) {
             
             #--------------bait background sheet for Fisher_Test--------------#
             
-            #提取char信息
+            
             in_df <- df[,c(1:5)]
             
-            #背景总和(所有重复，暂定)
+            
             background_total <- sum(back_inloop)
             
-            #bait总和(所有重复，暂定)
+            
             bait_total <- sum(bait)
             
             
-            #backg. 和bait总数比大小，决定情况
+            
             if (background_total < bait_total)
               
             {
@@ -559,19 +559,19 @@ server <- function(input, output) {
               
             } 
             
-            #如果bait比background小，要impute所有0为1
+            
             if (background_total > bait_total)
               
             {
               
               df2 <- cbind(in_df,bait)
-              df2_original <- df2      #用来比对impute前后
+              df2_original <- df2     
               
               row_num <- nrow(df2)
               
               rows_of_zeros <- 0
               
-              #计数全是0的row
+              
               for (x in 1:row_num) 
                 
               {
@@ -585,10 +585,10 @@ server <- function(input, output) {
                 
               }
               
-              #计算bait 和background 的差,与全是0的row相差几倍
+              
               fold1 <- (background_total - bait_total)/rows_of_zeros
               
-              #定义impute数,给全是0的row impute一个数,来使bait总和超过background （最多不超过4）
+              
               if (fold1 < 1)
               {impute_num <- 1
               impute_star <- "*"} else 
@@ -606,7 +606,7 @@ server <- function(input, output) {
                       impute_star <- "*****"
                       }
               
-              #根据上述结果对df2进行impute
+              
               for (x in 1:row_num) 
               {
                 matrix1 <- as.matrix(df2[x,c(6:(6+input$repeats-1))])
@@ -614,13 +614,13 @@ server <- function(input, output) {
                 if (sum(matrix1)==0 )
                   
                 { 
-                  matrix1[1,1] <- impute_num      #impute number
+                  matrix1[1,1] <- impute_num      
                   df2[x,c(6:(6+input$repeats-1))]    <-    matrix1  
-                  df2[x,2] <- paste(df2[x,2],impute_star,sep = "")   #在majority protein上加星号，值是impute_star,(先不加)，注意majority的位置是[x,2]
+                  df2[x,2] <- paste(df2[x,2],impute_star,sep = "")  
                 }
               }
               
-              #重新提取char信息（更新带有impute星号的majority protein name）  
+                
               in_df <- df2[,c(1:5)] 
               
               back_inloop2 <- back_inloop
@@ -636,37 +636,37 @@ server <- function(input, output) {
             
             
             
-            #生成新col信息
             
-            #1 添加各个row background 数据（暂定重复总和）
+            
+            ）
             in_df$background <- apply(back_inloop2,1,sum)
             
             
-            #2添加background othesr列
+            
             in_df$background_others <- background_total_loop2 - in_df$background
             
-            #bait row总和  
+             
             in_df$baited <-  apply(bait_inloop2,1,sum)
             
-            #3计算bait 
+            
             in_df$bait <- in_df$baited -  in_df$background
             
-            #去掉baited列
+            
             in_df <- subset(in_df,select = -c(baited))
             
-            #负值变为0
+            
             in_df$bait[in_df$bait < 0 ] = 0
             
             
-            #4计算bait_others 
+            
             in_df$bait_others <- bait_total_loop2 - background_total_loop2 - in_df$bait
             
-            #负值变为0
+            
             in_df$bait_others[in_df$bait_others < 0 ] = 0
             
             
             
-            #重命名col
+            
             colnames(in_df)[6:9] <- c(
               paste(gsub('.{2}$','',colnames(back_inloop2)[1]),"background",sep = "_"),
               paste(gsub('.{2}$','',colnames(back_inloop2)[1]),"background_others",sep = "_"),
@@ -676,40 +676,40 @@ server <- function(input, output) {
             
             
             
-            #================================#
-            #---------开始fisher循环---------#
-            #================================#
+            #===============================================#
+            #---------Start Fisher Loop   num1 = 0 ---------#
+            #===============================================#
             
             
             data3 <- in_df[,6:9]
             
-            #读取行数
+            
             k_row <- nrow(data3)
             
-            #空数据集收集P值
+            
             Fisher_P <-data.frame()
             
             
             for (k in 1:k_row) {
               
               #~~~#
-              tryCatch({   #用tryCatch功能夹住方程，如果因无法算P产生错误则跳过，生成NA
+              tryCatch({   
                 #~~~#
                 
-                #构建fisher矩阵
+                
                 datainput <- matrix(as.numeric(c(data3[k,1],data3[k,2],data3[k,3],data3[k,4])), 2,
                                     dimnames = list(c("protein","others"),
                                                     c("background","bait")
                                     )
                 )
-                #Fisher Test
+                
                 dataoutput <- fisher.test(datainput, alternative = "less")
                 
-                #收集P值
+                
                 Fisher_P[k,1] <- dataoutput$p.value
                 
-                #~~~#  #console内提示错误
-              }, error=function(e){print(paste("=======","Error occurred in",result_out[i],data2[k,1],"=======",sep = " "))})  #用tryCatch功能夹住方程，如果因无法算P产生错误则跳过，生成NA-尾部
+                #~~~#  
+              }, error=function(e){print(paste("=======","Error occurred in",result_out[i],data2[k,1],"=======",sep = " "))})  
               #~~~# 
             }
             
@@ -721,7 +721,7 @@ server <- function(input, output) {
             
             
             
-            #收集cutoff后的protein ID 到总表内
+            #collect protein ID after cutoff
             
             
             medi1 <- data.frame(result_cutoff[,2])
@@ -750,7 +750,7 @@ server <- function(input, output) {
     
   })
   
-  #生成bait target name 传导给Upset plot output功能
+  #generate bait target name, pass to Upset plot output function
   getBait_target_name <- reactive({
     
     if(input$goButton!= 0){
@@ -767,7 +767,7 @@ server <- function(input, output) {
     }
   })
   
-  #把list of prey变成表格
+  #list of prey ---> chart
   ListofPrey.table  <- reactive({
     
     if(input$goButton!= 0 && input$num1 == 0){
@@ -828,19 +828,19 @@ server <- function(input, output) {
       
       bait_target_name2 <- getBait_target_name()
      
-      p1 <- upset(fromList(list1),  #转换兼容数据形式
+      p1 <- upset(fromList(list1),  
                   
-                  nsets = 30,     # 绘制的最大集合个数 - 对应表格col，图下-柱形图+点图
+                  nsets = 30,     
                   
-                  nintersects = 40, #绘制的最大交集个数，NA则全部绘制 - 对应表格rol，图上-柱形图
+                  nintersects = 40, 
                   
-                  order.by = "freq", # 矩阵中的交点是如何排列的。 "freq"根据交集个数排序，"degree" 根据基因交集密集度
+                  order.by = "freq", 
                   
                   keep.order = TRUE,
                   
-                  mb.ratio = c(0.45,0.55),   # 左侧和上方条形图的比例关系
+                  mb.ratio = c(0.45,0.55),   
                   
-                  text.scale = 1.9, # 文字标签的大小
+                  text.scale = 1.9,  
                   
                   #mainbar.y.label = paste("intersections ", "(", bait_target_name2, ")", sep = "")   #error/warning occur after R 4.1
       )
@@ -956,5 +956,5 @@ server <- function(input, output) {
 }
 
 
-
+####################
 shinyApp(ui, server)
