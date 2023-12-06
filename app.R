@@ -377,7 +377,7 @@ server <- function(input, output) {
             }
           }
           
-          ）  
+            
           in_df <- df2[,c(1:5)] 
           
           back_inloop2 <- back_inloop
@@ -638,7 +638,7 @@ server <- function(input, output) {
             
             
             
-            ）
+            
             in_df$background <- apply(back_inloop2,1,sum)
             
             
