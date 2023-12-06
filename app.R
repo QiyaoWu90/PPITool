@@ -877,7 +877,7 @@ server <- function(input, output) {
   
   
   
-  #------------------------- interaction chart ------------------------#
+  #-------------------------- interaction chart -------------------------#
   
   
   inter_chart  <-  reactive({
